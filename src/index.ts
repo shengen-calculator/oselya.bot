@@ -14,6 +14,7 @@ import * as crypto from "crypto";
 import BotRunner from "./BotRunner";
 import Constants from "./Constants";
 import {setGlobalOptions} from "firebase-functions/v2";
+import TelegramRunner from "./TelegramRunner";
 
 setGlobalOptions({region: "europe-west1"});
 
@@ -41,6 +42,15 @@ export const telegramBot = onRequest(async (request, response) => {
     const body = request["rawBody"].toString("utf8");
     logger.info(`Body -> ${body}`);
     const token = request.get("X-Telegram-Bot-Api-Secret-Token");
-    logger.info(`Token -> ${token}`);
+    const telegramToken = defineSecret(Constants.TELEGRAM_TOKEN);
+    if (token !== telegramToken.value()) {
+        logger.info(`Token -> ${token}`);
+        logger.info(`Telegram token -> ${telegramToken.value()}`);
+        response.status(500).send("Wrong token");
+        return;
+    }
     response.status(200).send("OK");
+
+    const telegramRunner = new TelegramRunner(body);
+    await telegramRunner.run();
 });

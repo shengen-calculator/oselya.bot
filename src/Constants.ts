@@ -5,6 +5,8 @@ export default abstract class Constants {
     static readonly BASE_URL = "https://chatapi.viber.com/pa";
     static readonly MESSAGE_URL = "send_message";
     static readonly VIBER_API_KEY = "VIBER_API_KEY";
+    static readonly TELEGRAM_API_KEY = "TELEGRAM_API_KEY";
+    static readonly TELEGRAM_TOKEN = "TELEGRAM_TOKEN";
     static readonly HEADER_TOKEN_KEY = "X-Viber-Auth-Token";
     static readonly OSELYA_SENDER = "Оселя Лайф";
     // eslint-disable-next-line max-len
