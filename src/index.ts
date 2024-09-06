@@ -13,8 +13,11 @@ import {defineSecret} from "firebase-functions/params";
 import * as crypto from "crypto";
 import BotRunner from "./BotRunner";
 import Constants from "./Constants";
+import {setGlobalOptions} from "firebase-functions/v2";
 
-export const chatBot = onRequest(async (request, response) => {
+setGlobalOptions({region: "europe-west1"});
+
+export const viberBot = onRequest(async (request, response) => {
     const body = request["rawBody"].toString("utf8");
     logger.info(`Body -> ${body}`);
     const apiKey = defineSecret(Constants.VIBER_API_KEY);
@@ -32,4 +35,12 @@ export const chatBot = onRequest(async (request, response) => {
 
     const botRunner = new BotRunner(body);
     await botRunner.run();
+});
+
+export const telegramBot = onRequest(async (request, response) => {
+    const body = request["rawBody"].toString("utf8");
+    logger.info(`Body -> ${body}`);
+    const token = request.get("X-Telegram-Bot-Api-Secret-Token");
+    logger.info(`Token -> ${token}`);
+    response.status(200).send("OK");
 });
